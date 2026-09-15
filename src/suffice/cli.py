@@ -24,7 +24,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             config = ExperimentConfig.from_yaml(args.config)
             print(f"Valid: {config.name}")
             return 0
-        result = Experiment.from_yaml(args.config).run()
+        result = Experiment.from_yaml(args.config).run(save=True)
         print(json.dumps({"success_rate": result.success_rate, "cases": len(result.cases)}))
         return 0
     except (ConfigError, OSError, ValueError) as exc:
