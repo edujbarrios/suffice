@@ -5,6 +5,7 @@ from pathlib import Path
 from suffice.agents.mock import MockAgentAdapter
 from suffice.config import ExperimentConfig
 from suffice.models import ExperimentResult
+from suffice.runs import save_run
 from suffice.tasks import load_tasks
 
 
@@ -16,7 +17,7 @@ class Experiment:
     def from_yaml(cls, path: str | Path) -> Experiment:
         return cls(ExperimentConfig.from_yaml(path))
 
-    def run(self) -> ExperimentResult:
+    def run(self, *, save: bool = False) -> ExperimentResult:
         if self.config.model.provider != "mock":
             raise ValueError(f"Unsupported provider: {self.config.model.provider}")
         agent = MockAgentAdapter()
@@ -26,5 +27,8 @@ class Experiment:
             result.success = str(result.output).strip() == str(task.expected).strip()
             result.metadata["task_id"] = task.id
             cases.append(result)
-        return ExperimentResult(cases)
+        experiment_result = ExperimentResult(cases)
+        if save:
+            save_run(self.config, experiment_result)
+        return experiment_result
 

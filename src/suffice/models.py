@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from suffice.tokens import TokenTrace
+
 
 @dataclass(frozen=True)
 class Task:
@@ -21,6 +23,7 @@ class AgentRunResult:
     tool_calls: list[dict[str, Any]] = field(default_factory=list)
     error: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
+    token_trace: TokenTrace = field(default_factory=TokenTrace)
 
 
 @dataclass

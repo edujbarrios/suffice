@@ -3,7 +3,7 @@ from __future__ import annotations
 from suffice.agents.base import AgentAdapter
 from suffice.config import ExperimentConfig
 from suffice.models import AgentRunResult, Task
-from suffice.tokens import EstimatedTokenCounter
+from suffice.tokens import EstimatedTokenCounter, TokenCategory, TokenTrace
 
 
 class MockAgentAdapter(AgentAdapter):
@@ -11,17 +11,19 @@ class MockAgentAdapter(AgentAdapter):
 
     def run(self, task: Task, config: ExperimentConfig) -> AgentRunResult:
         counter = EstimatedTokenCounter()
-        input_tokens = counter.count(config.system_prompt).count or 0
-        input_tokens += counter.count(task.input).count or 0
+        trace = TokenTrace()
+        trace.record(TokenCategory.SYSTEM, counter.count(config.system_prompt))
+        trace.record(TokenCategory.USER, counter.count(task.input))
         output = task.expected
-        output_tokens = counter.count(str(output)).count or 0
+        trace.record(TokenCategory.ASSISTANT_OUTPUT, counter.count(str(output)))
         return AgentRunResult(
             output=output,
             metadata={
-                "input_tokens": input_tokens,
-                "output_tokens": output_tokens,
-                "total_tokens": input_tokens + output_tokens,
+                "input_tokens": trace.input_total,
+                "output_tokens": trace.counts[TokenCategory.ASSISTANT_OUTPUT].count or 0,
+                "total_tokens": trace.total or 0,
                 "count_source": "estimated",
             },
+            token_trace=trace,
         )
 
