@@ -1,5 +1,5 @@
 name: llm7-agent-efficiency-baseline
-tasks: ../benchmarks/agent_efficiency.jsonl
+tasks: ../benchmarks/llm7_context_efficiency_v1.jsonl
 seed: 42
 system_prompt: Return only the requested answer, with no explanation or formatting.
 model:

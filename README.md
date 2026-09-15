@@ -165,11 +165,18 @@ depend on an agent framework or vector database.
 
 ## Benchmark
 
-The original 12-case offline smoke benchmark covers factual QA, extraction,
-calculations, tool selection/results, multi-step work, explanation, comparison,
-and distractor context. Deterministic budget thresholds exercise the harness;
-they do not represent LLM performance. Use a larger, domain-reviewed suite
-before drawing research or production conclusions.
+The repository contains two deliberately different datasets. The 12-case
+offline smoke suite validates harness behavior with deterministic mock budgets.
+The 60-case `llm7-context-efficiency-v1` suite is a concrete use case for short,
+deterministically verifiable answers across factual QA, calculation, extraction,
+and distractor context.
+
+The 60 prompts and expected answers were generated with AI assistance and have
+not yet received independent expert review. They are synthetic evaluation
+content, not evidence of general model capability. See
+[`benchmarks/README.md`](benchmarks/README.md) for composition, methodology, and
+limitations. Do not draw research or production conclusions without further
+human review and domain-specific cases.
 
 ## Reproduce from a fresh clone
 
