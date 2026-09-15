@@ -10,6 +10,7 @@ from suffice.tokens import TokenCategory
 @dataclass(frozen=True)
 class Metrics:
     success_rate: float
+    average_latency_ms: float
     average_tokens_per_task: float
     median_tokens_per_task: float
     tokens_per_successful_task: float | None
@@ -48,6 +49,9 @@ def calculate_metrics(result: ExperimentResult) -> Metrics:
     )
     return Metrics(
         success_rate=result.success_rate,
+        average_latency_ms=(
+            statistics.fmean(case.latency_ms for case in result.cases) if result.cases else 0.0
+        ),
         average_tokens_per_task=statistics.fmean(totals) if totals else 0.0,
         median_tokens_per_task=statistics.median(totals) if totals else 0.0,
         tokens_per_successful_task=result.tokens_per_successful_task,

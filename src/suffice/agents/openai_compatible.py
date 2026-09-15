@@ -72,6 +72,8 @@ class OpenAICompatibleAgentAdapter(AgentAdapter):
             output=output,
             latency_ms=(time.perf_counter() - started) * 1000,
             metadata={
+                "requested_model": config.model.model,
+                "resolved_model": data.get("model", config.model.model),
                 "provider_usage": usage,
                 "total_tokens": usage.get("total_tokens", trace.total),
             },

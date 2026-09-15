@@ -109,12 +109,21 @@ cp .env.example .env
 # Set LLM7_API_KEY in .env, then run:
 suffice validate examples/llm7.yaml
 suffice run examples/llm7.yaml
+suffice benchmark examples/llm7_matrix.yaml
 ```
 
 On Windows PowerShell, copy the file with `Copy-Item .env.example .env`.
 Suffice loads `.env` automatically. The bundled configuration uses the
 documented `https://api.llm7.io/v1` endpoint and the `default` model selector.
 The real `.env` file is ignored by Git; `.env.example` contains no credential.
+
+For the CV-oriented experiment, `llm7_matrix.yaml` evaluates the same 60 tasks
+with both `default` and `fast`, each under semantically equivalent `baseline`
+and `compact` agent prompts. The optional paid `pro` selector is disabled by
+default. This factorial design separates model choice from prompt overhead and
+records the provider-resolved model alongside success, tokens, and latency.
+Results are written beneath `runs/benchmarks/`; no result is bundled until it
+has actually been generated.
 
 ## Token accounting and metrics
 

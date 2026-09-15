@@ -24,6 +24,7 @@ def result(successes: list[bool], tokens: int) -> ExperimentResult:
 def test_metrics_report_quality_beside_token_cost() -> None:
     metrics = calculate_metrics(result([True, False], 10))
     assert metrics.success_rate == 0.5
+    assert metrics.average_latency_ms == 0
     assert metrics.average_tokens_per_task == 10
     assert metrics.tokens_per_successful_task == 10
     assert metrics.input_tokens == 16

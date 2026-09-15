@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from dataclasses import asdict
 from pathlib import Path
 
+from suffice.benchmark import BenchmarkConfigError, run_benchmark_matrix
 from suffice.config import ConfigError, ExperimentConfig
 from suffice.experiment import Experiment
 from suffice.experiments import budget_sweep
@@ -25,6 +26,8 @@ def build_parser() -> argparse.ArgumentParser:
     compare.add_argument("candidate_run")
     report = subparsers.add_parser("report")
     report.add_argument("run_directory")
+    benchmark = subparsers.add_parser("benchmark")
+    benchmark.add_argument("matrix")
     return parser
 
 
@@ -68,10 +71,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                 raise ValueError(f"Report not found: {report_path}")
             print(report_path.resolve())
             return 0
+        if args.command == "benchmark":
+            print(run_benchmark_matrix(args.matrix).resolve())
+            return 0
         result = Experiment.from_yaml(args.config).run(save=True)
         print(json.dumps({"success_rate": result.success_rate, "cases": len(result.cases)}))
         return 0
-    except (ConfigError, OSError, ValueError) as exc:
+    except (BenchmarkConfigError, ConfigError, OSError, ValueError) as exc:
         print(f"Error: {exc}")
         return 2
 
