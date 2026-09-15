@@ -19,9 +19,13 @@ class OpenAICompatibleAgentAdapter(AgentAdapter):
             import httpx
         except ImportError as exc:  # pragma: no cover - environment dependent
             raise RuntimeError("Install Suffice with the 'openai' extra") from exc
-        api_key = os.environ.get(config.model.api_key_env)
-        if not api_key:
-            raise ValueError(f"Missing API key environment variable: {config.model.api_key_env}")
+        api_key = None
+        if config.model.api_key_env:
+            api_key = os.environ.get(config.model.api_key_env)
+            if not api_key:
+                raise ValueError(
+                    f"Missing API key environment variable: {config.model.api_key_env}"
+                )
         base_url = (config.model.base_url or "https://api.openai.com/v1").rstrip("/")
         payload = {
             "model": config.model.model,
@@ -37,10 +41,9 @@ class OpenAICompatibleAgentAdapter(AgentAdapter):
         response = None
         for attempt in range(config.model.retries + 1):
             try:
+                headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
                 response = client.post(
-                    f"{base_url}/chat/completions",
-                    headers={"Authorization": f"Bearer {api_key}"},
-                    json=payload,
+                    f"{base_url}/chat/completions", headers=headers, json=payload
                 )
                 response.raise_for_status()
                 break
