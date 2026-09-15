@@ -14,7 +14,9 @@ class MockAgentAdapter(AgentAdapter):
         trace = TokenTrace()
         trace.record(TokenCategory.SYSTEM, counter.count(config.system_prompt))
         trace.record(TokenCategory.USER, counter.count(task.input))
-        output = task.expected
+        required_tokens = int(task.metadata.get("minimum_budget", 0))
+        succeeds_budget = config.model.max_tokens >= required_tokens
+        output = task.expected if succeeds_budget else "[budget exhausted]"
         trace.record(TokenCategory.ASSISTANT_OUTPUT, counter.count(str(output)))
         return AgentRunResult(
             output=output,
