@@ -20,4 +20,3 @@ def load_tasks(path: str | Path) -> list[Task]:
     if not tasks:
         raise ValueError("Task dataset is empty")
     return tasks
-

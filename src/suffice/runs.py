@@ -10,7 +10,9 @@ from typing import Any
 import yaml
 
 from suffice.config import ExperimentConfig
+from suffice.metrics import calculate_metrics
 from suffice.models import ExperimentResult
+from suffice.reporting import render_html_report
 
 SECRET_PATTERN = re.compile(r"(api[_-]?key|access[_-]?token|secret|password)", re.IGNORECASE)
 
@@ -50,12 +52,10 @@ def save_run(config: ExperimentConfig, result: ExperimentResult) -> Path:
                 "token_trace": case.token_trace.to_dict(),
             }
             stream.write(json.dumps(redact_secrets(data), sort_keys=True) + "\n")
-    _write_json(
-        directory / "metrics.json",
-        {
-            "success_rate": result.success_rate,
-            "tokens_per_successful_task": result.tokens_per_successful_task,
-        },
+    metrics = asdict(calculate_metrics(result))
+    _write_json(directory / "metrics.json", metrics)
+    (directory / "report.html").write_text(
+        render_html_report(config.name, metrics, result.cases), encoding="utf-8"
     )
     return directory
 

@@ -56,4 +56,3 @@ def evaluate(name: str, actual: Any, expected: Any) -> bool:
     except KeyError as exc:
         raise ValueError(f"Unknown evaluator: {name}") from exc
     return evaluator.evaluate(actual, expected)
-

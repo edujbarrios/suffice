@@ -55,4 +55,3 @@ def _average_tokens(result: ExperimentResult) -> float:
     if not result.cases:
         return 0.0
     return sum(case.token_trace.total or 0 for case in result.cases) / len(result.cases)
-

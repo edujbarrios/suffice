@@ -1,0 +1,13 @@
+{"id":"factual-capital","input":"What is the capital of Norway?","expected":"Oslo","evaluation":"exact_match","metadata":{"type":"factual","minimum_budget":16}}
+{"id":"factual-element","input":"Which chemical element has atomic number 8?","expected":"oxygen","evaluation":"exact_match","metadata":{"type":"factual","minimum_budget":16}}
+{"id":"calculation-sum","input":"Calculate 17 + 25.","expected":42,"evaluation":"numeric","metadata":{"type":"calculation","minimum_budget":16}}
+{"id":"calculation-rate","input":"A service handles 240 jobs in 4 minutes. How many jobs per minute?","expected":60,"evaluation":"numeric","metadata":{"type":"calculation","minimum_budget":32}}
+{"id":"extraction-status","input":"From this record return only status: order=4812; customer=EJ; status=shipped; priority=normal","expected":"shipped","evaluation":"exact_match","metadata":{"type":"extraction","minimum_budget":32}}
+{"id":"structured-order","input":"Return the object describing status of order 4812.","expected":{"status":"shipped"},"evaluation":"structured","metadata":{"type":"structured","minimum_budget":64}}
+{"id":"tool-selection","input":"Choose the tool needed to learn today's temperature: calculator, weather, database.","expected":"weather","evaluation":"exact_match","metadata":{"type":"tool_selection","minimum_budget":32}}
+{"id":"tool-result","input":"A lookup tool returned {\"status\":\"ok\",\"value\":42,\"debug\":\"unused\"}. Return the value.","expected":42,"evaluation":"numeric","metadata":{"type":"tool_execution","minimum_budget":64}}
+{"id":"workflow","input":"Lookup gives price=12 and quantity=4. Multiply them and return the total.","expected":48,"evaluation":"numeric","metadata":{"type":"multi_step","minimum_budget":128}}
+{"id":"context-heavy","input":"Blocks: A says owner=Ana; B says color=blue; C says port=8080. What port is specified?","expected":8080,"evaluation":"numeric","metadata":{"type":"context","minimum_budget":64}}
+{"id":"short-explanation","input":"Complete: TCP is used when delivery must be ___.","expected":"reliable","evaluation":"exact_match","metadata":{"type":"explanation","minimum_budget":32}}
+{"id":"comparison","input":"Which is connectionless, TCP or UDP?","expected":"UDP","evaluation":"exact_match","metadata":{"type":"comparison","minimum_budget":32}}
+
