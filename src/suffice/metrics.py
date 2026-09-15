@@ -61,7 +61,11 @@ def calculate_metrics(result: ExperimentResult) -> Metrics:
 
 def efficiency_frontier(sweep: dict[int, ExperimentResult]) -> list[FrontierPoint]:
     return [
-        FrontierPoint(budget, result.success_rate, calculate_metrics(result).average_tokens_per_task)
+        FrontierPoint(
+            budget,
+            result.success_rate,
+            calculate_metrics(result).average_tokens_per_task,
+        )
         for budget, result in sorted(sweep.items())
     ]
 
