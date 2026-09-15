@@ -4,6 +4,7 @@ from pathlib import Path
 
 from suffice.agents.mock import MockAgentAdapter
 from suffice.config import ExperimentConfig
+from suffice.evaluators import evaluate
 from suffice.models import ExperimentResult
 from suffice.runs import save_run
 from suffice.tasks import load_tasks
@@ -24,7 +25,7 @@ class Experiment:
         cases = []
         for task in load_tasks(self.config.tasks_path):
             result = agent.run(task, self.config)
-            result.success = str(result.output).strip() == str(task.expected).strip()
+            result.success = evaluate(task.evaluation, result.output, task.expected)
             result.metadata["task_id"] = task.id
             cases.append(result)
         experiment_result = ExperimentResult(cases)
