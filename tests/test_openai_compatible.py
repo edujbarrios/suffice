@@ -44,7 +44,9 @@ def test_adapter_parses_provider_usage(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_adapter_requires_environment_secret(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("MISSING_KEY", raising=False)
     config = ExperimentConfig(
-        "api", Path("tasks"), model=ModelConfig(provider="openai_compatible", api_key_env="MISSING_KEY")
+        "api",
+        Path("tasks"),
+        model=ModelConfig(provider="openai_compatible", api_key_env="MISSING_KEY"),
     )
     with pytest.raises(ValueError, match="Missing API key"):
         OpenAICompatibleAgentAdapter().run(Task("x", "q", "a"), config)
