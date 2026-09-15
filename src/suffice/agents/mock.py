@@ -28,4 +28,3 @@ class MockAgentAdapter(AgentAdapter):
             },
             token_trace=trace,
         )
-

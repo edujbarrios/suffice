@@ -103,4 +103,3 @@ def _optional_positive(value: Any, field_name: str) -> int | None:
     if parsed < 0:
         raise ConfigError(f"{field_name} must be non-negative")
     return parsed
-

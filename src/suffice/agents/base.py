@@ -9,4 +9,3 @@ from suffice.models import AgentRunResult, Task
 class AgentAdapter(ABC):
     @abstractmethod
     def run(self, task: Task, config: ExperimentConfig) -> AgentRunResult: ...
-

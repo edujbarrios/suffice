@@ -40,4 +40,3 @@ class ExperimentResult:
         if not successful:
             return None
         return sum(case.token_trace.total or 0 for case in successful) / len(successful)
-

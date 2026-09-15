@@ -44,4 +44,3 @@ def test_experiment_and_cli(capsys: pytest.CaptureFixture[str]) -> None:
     assert result.tokens_per_successful_task is not None
     assert main(["validate", str(path)]) == 0
     assert "Valid: offline-baseline" in capsys.readouterr().out
-

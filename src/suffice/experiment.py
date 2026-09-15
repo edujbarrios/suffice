@@ -38,4 +38,3 @@ class Experiment:
         if save:
             save_run(self.config, experiment_result)
         return experiment_result
-
