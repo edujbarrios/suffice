@@ -1,0 +1,3 @@
+{"id":"capital-norway","input":"What is the capital of Norway?","expected":"Oslo","evaluation":"exact_match","metadata":{"type":"factual"}}
+{"id":"simple-sum","input":"What is 17 + 25?","expected":42,"evaluation":"numeric","metadata":{"type":"calculation"}}
+
