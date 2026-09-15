@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from enum import StrEnum
+from enum import Enum
 
 
-class CountSource(StrEnum):
+class CountSource(str, Enum):
     PROVIDER_REPORTED = "provider_reported"
     EXACT_TOKENIZER = "exact_tokenizer"
     ESTIMATED = "estimated"
@@ -28,4 +28,3 @@ class EstimatedTokenCounter(TokenCounter):
 
     def count(self, text: str) -> TokenCount:
         return TokenCount(max(1, (len(text) + 3) // 4) if text else 0, CountSource.ESTIMATED)
-
