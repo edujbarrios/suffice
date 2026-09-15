@@ -125,6 +125,43 @@ records the provider-resolved model alongside success, tokens, and latency.
 Results are written beneath `runs/benchmarks/`; no result is bundled until it
 has actually been generated.
 
+### Reproducible multi-model results
+
+The table below is the canonical project summary. It will be populated only
+from a completed `suffice benchmark examples/llm7_matrix.yaml` run. Until then,
+`Pending` means **not measured**; it is not a zero and not an estimated result.
+
+| Requested model | Resolved model | Agent | Success rate | Avg tokens/task | Tokens/successful task | Avg latency | Quality verdict |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| `default` | Pending | `baseline` | Pending | Pending | Pending | Pending | Pending |
+| `default` | Pending | `compact` | Pending | Pending | Pending | Pending | Pending |
+| `fast` | Pending | `baseline` | Pending | Pending | Pending | Pending | Pending |
+| `fast` | Pending | `compact` | Pending | Pending | Pending | Pending | Pending |
+
+After a real run, this section will also record:
+
+- the UTC execution timestamp and Suffice commit SHA;
+- the benchmark dataset version and number of tasks;
+- the exact matrix configuration;
+- token-count provenance reported by the provider;
+- a link to the committed machine-readable `summary.json` artifact;
+- baseline-to-compact token reduction for each model;
+- any success-rate regression, shown more prominently than token savings.
+
+Reproduce the experiment from the repository root:
+
+```bash
+python -m pip install -e ".[dev]"
+Copy-Item .env.example .env  # Windows PowerShell
+# Add LLM7_API_KEY to .env without committing it.
+suffice benchmark examples/llm7_matrix.yaml
+```
+
+The comparison is considered an optimization only when the compact agent
+reduces measured tokens while satisfying the configured quality constraints.
+This prevents a shorter failed answer from being presented as an efficiency
+gain.
+
 ## Token accounting and metrics
 
 Traces recognize `system`, `user`, `history`, `context`, `memory`, `retrieval`,
