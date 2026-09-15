@@ -19,6 +19,8 @@ class ModelConfig:
     max_tokens: int = 1024
     base_url: str | None = None
     api_key_env: str = "OPENAI_API_KEY"
+    timeout_seconds: float = 30.0
+    retries: int = 2
 
 
 @dataclass(frozen=True)
@@ -60,6 +62,8 @@ class ExperimentConfig:
             raise ConfigError("minimum_success_rate must be between 0 and 1")
         if model.max_tokens <= 0:
             raise ConfigError("model.max_tokens must be positive")
+        if model.timeout_seconds <= 0 or model.retries < 0:
+            raise ConfigError("model timeout must be positive and retries non-negative")
         budgets = tuple(int(value) for value in raw.get("token_budgets", ()))
         if any(value <= 0 for value in budgets):
             raise ConfigError("token_budgets must contain positive integers")

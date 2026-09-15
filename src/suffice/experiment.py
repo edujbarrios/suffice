@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from suffice.agents.mock import MockAgentAdapter
+from suffice.agents.openai_compatible import OpenAICompatibleAgentAdapter
 from suffice.config import ExperimentConfig
 from suffice.evaluators import evaluate
 from suffice.models import ExperimentResult
@@ -19,9 +20,14 @@ class Experiment:
         return cls(ExperimentConfig.from_yaml(path))
 
     def run(self, *, save: bool = False) -> ExperimentResult:
-        if self.config.model.provider != "mock":
-            raise ValueError(f"Unsupported provider: {self.config.model.provider}")
-        agent = MockAgentAdapter()
+        adapters = {
+            "mock": MockAgentAdapter,
+            "openai_compatible": OpenAICompatibleAgentAdapter,
+        }
+        try:
+            agent = adapters[self.config.model.provider]()
+        except KeyError as exc:
+            raise ValueError(f"Unsupported provider: {self.config.model.provider}") from exc
         cases = []
         for task in load_tasks(self.config.tasks_path):
             result = agent.run(task, self.config)
