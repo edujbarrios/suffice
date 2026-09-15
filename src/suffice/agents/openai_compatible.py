@@ -4,6 +4,8 @@ import os
 import time
 from typing import Any
 
+from dotenv import load_dotenv
+
 from suffice.agents.base import AgentAdapter
 from suffice.config import ExperimentConfig
 from suffice.models import AgentRunResult, Task
@@ -15,6 +17,7 @@ class OpenAICompatibleAgentAdapter(AgentAdapter):
         self.client = client
 
     def run(self, task: Task, config: ExperimentConfig) -> AgentRunResult:
+        load_dotenv()
         try:
             import httpx
         except ImportError as exc:  # pragma: no cover - environment dependent

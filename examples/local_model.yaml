@@ -1,0 +1,18 @@
+name: local-model-study
+tasks: ../benchmarks/agent_efficiency.jsonl
+seed: 42
+system_prompt: Answer correctly and concisely.
+model:
+  provider: openai_compatible
+  base_url: http://127.0.0.1:8000/v1
+  api_key_env: null
+  model: local-model-name
+  temperature: 0
+  max_tokens: 128
+  timeout_seconds: 60
+  retries: 0
+optimization:
+  minimum_success_rate: 0.95
+  maximum_success_drop: 0.01
+output_directory: ../runs
+

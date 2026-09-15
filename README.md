@@ -71,6 +71,8 @@ print(result.tokens_per_successful_task)
 
 ## Configuration
 
+### Offline deterministic mock
+
 ```yaml
 name: prompt-budget-study
 tasks: ../benchmarks/agent_efficiency.jsonl
@@ -92,10 +94,74 @@ tool_output_mode: structured
 output_directory: ../runs
 ```
 
-For compatible endpoints, use `provider: openai_compatible`, provide
-`base_url`, and set `api_key_env` to an environment variable *name*. Secrets
-are never accepted as config values. Install HTTP support with
+### Online OpenAI-compatible model
+
+Store the secret outside YAML:
+
+```bash
+cp .env.example .env
+# Edit .env locally: SUFFICE_API_KEY=your-real-key
+```
+
+Then reference the environment variable by name:
+
+```yaml
+name: online-provider-study
+tasks: ../benchmarks/agent_efficiency.jsonl
+seed: 42
+system_prompt: Answer correctly and concisely.
+model:
+  provider: openai_compatible
+  base_url: https://provider.example/v1
+  api_key_env: SUFFICE_API_KEY
+  model: provider-model-name
+  temperature: 0
+  max_tokens: 128
+  timeout_seconds: 30
+  retries: 2
+optimization:
+  minimum_success_rate: 0.95
+  maximum_success_drop: 0.01
+output_directory: ../runs
+```
+
+`api_key_env` is the variable name, not the secret value. Suffice rejects an
+`api_key` field in YAML so credentials cannot accidentally enter configuration
+artifacts or Git history. `.env` is ignored by Git; `.env.example` contains
+only a placeholder. Exporting the same variable in the shell also works.
+
+### Local OpenAI-compatible model
+
+For a local server that does not require authentication, use `null` and Suffice
+will omit the `Authorization` header entirely:
+
+```yaml
+name: local-model-study
+tasks: ../benchmarks/agent_efficiency.jsonl
+seed: 42
+system_prompt: Answer correctly and concisely.
+model:
+  provider: openai_compatible
+  base_url: http://127.0.0.1:8000/v1
+  api_key_env: null
+  model: local-model-name
+  temperature: 0
+  max_tokens: 128
+  timeout_seconds: 60
+  retries: 0
+optimization:
+  minimum_success_rate: 0.95
+  maximum_success_drop: 0.01
+output_directory: ../runs
+```
+
+Change `base_url` and `model` to match the local server. If a local endpoint
+does require a token, set `api_key_env` to an environment variable name just as
+for an online provider. Install HTTP support with
 `pip install -e ".[openai]"`.
+
+Complete versions are available in `examples/online_model.yaml` and
+`examples/local_model.yaml`.
 
 ## Token accounting and metrics
 
