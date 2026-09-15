@@ -1,0 +1,40 @@
+name: llm7-multi-model-context-efficiency-v1
+tasks: ../benchmarks/llm7_context_efficiency_v1.jsonl
+output_directory: ../runs
+seed: 42
+minimum_success_rate: 0.95
+maximum_success_drop: 0.01
+
+provider:
+  base_url: https://api.llm7.io/v1
+  api_key_env: LLM7_API_KEY
+  timeout_seconds: 60
+  retries: 2
+
+# "default" and "fast" run without assuming paid access. Enable "pro" only
+# when the account has access; its requests can incur charges.
+models:
+  - id: default
+    selector: default
+  - id: fast
+    selector: fast
+  - id: pro
+    selector: pro
+    enabled: false
+
+# Both prompts impose the same answer contract. The baseline intentionally
+# states it verbosely so the experiment can measure repeated system-prompt cost.
+agents:
+  - id: baseline
+    system_prompt: >-
+      You are a careful question-answering agent. Read the complete user task,
+      identify the requested value, ignore information that is not relevant,
+      perform any required arithmetic accurately, and return only the requested
+      answer. Do not include an explanation, preamble, label, Markdown, or final
+      punctuation unless it is part of the answer itself.
+    temperature: 0
+    max_tokens: 128
+  - id: compact
+    system_prompt: Return only the requested answer; ignore irrelevant context.
+    temperature: 0
+    max_tokens: 128

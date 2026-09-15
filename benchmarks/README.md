@@ -41,3 +41,16 @@ Contributions should add human review, paraphrase diversity, adversarial
 distractors, and domain-specific suites rather than treating this dataset as
 finished.
 
+### Multi-model protocol
+
+`examples/llm7_matrix.yaml` defines a 2 × 2 comparison: two llm7.io model
+selectors (`default`, `fast`) and two agents (`baseline`, `compact`) that share
+the same behavioral contract but use differently sized system prompts. This
+keeps the 60 tasks, evaluator, temperature, and output cap fixed while varying
+one model dimension and one agent-configuration dimension.
+
+Run it with `suffice benchmark examples/llm7_matrix.yaml`. The summary records
+the requested selector, provider-resolved model, run directory, success rate,
+token breakdown, and latency-bearing case artifacts. The paid `pro` selector is
+included but disabled so it cannot incur charges accidentally.
+
