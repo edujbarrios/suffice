@@ -2,6 +2,12 @@
 
 **Do the task. Use fewer tokens.**
 
+> **Suffice finds how few tokens an AI agent needs to successfully complete a
+> task.**
+
+It measures token usage across prompts, context, tools, memory, and final
+responses, while ensuring that reducing tokens does not reduce task quality.
+
 Most agent benchmarks ask whether the task was completed. Suffice additionally
 asks how many tokens were required to complete it.
 
@@ -91,6 +97,25 @@ For compatible endpoints, use `provider: openai_compatible`, provide
 are never accepted as config values. Install HTTP support with
 `pip install -e ".[openai]"`.
 
+### Running experiments with llm7.io
+
+Suffice includes an llm7.io configuration because that service is being used
+for the project's real-model experiments. This statement identifies the
+experimental endpoint; it does not imply endorsement, partnership, or results
+that have not been generated and committed reproducibly.
+
+```bash
+cp .env.example .env
+# Set LLM7_API_KEY in .env, then run:
+suffice validate examples/llm7.yaml
+suffice run examples/llm7.yaml
+```
+
+On Windows PowerShell, copy the file with `Copy-Item .env.example .env`.
+Suffice loads `.env` automatically. The bundled configuration uses the
+documented `https://api.llm7.io/v1` endpoint and the `default` model selector.
+The real `.env` file is ignored by Git; `.env.example` contains no credential.
+
 ## Token accounting and metrics
 
 Traces recognize `system`, `user`, `history`, `context`, `memory`, `retrieval`,
@@ -165,9 +190,17 @@ suffice run examples/baseline.yaml
 
 ## Limitations and roadmap
 
-Version 0.1 exposes deterministic controls; it does not yet rewrite prompts,
-semantically prune context, run external tools, or provide a universal exact
-tokenizer. Provider usage fields also differ.
+Suffice is intentionally not a complete, universal benchmark. Every real use
+case has different tasks, success criteria, tools, context sources, and token
+constraints; answering the central question rigorously therefore requires a
+benchmark designed or adapted for that use case. The project provides a solid,
+reproducible foundation on which those domain-specific experiments can be
+built.
+
+Version 0.1 exposes deterministic controls and a smoke benchmark for validating
+the harness. It does not yet rewrite prompts, semantically prune context, run
+external tools, or provide a universal exact tokenizer. Provider usage fields
+also differ.
 
 The principal future direction is an **Agent Token Optimizer**:
 

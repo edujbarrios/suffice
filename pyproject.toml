@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MPL-2.0"
 requires-python = ">=3.10"
 authors = [{name = "Eduardo J. Barrios"}]
-dependencies = ["PyYAML>=6.0"]
+dependencies = ["python-dotenv>=1.0", "PyYAML>=6.0"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
