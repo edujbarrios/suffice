@@ -2,6 +2,12 @@
 
 **Do the task. Use fewer tokens.**
 
+> **Suffice finds how few tokens an AI agent needs to successfully complete a
+> task.**
+
+It measures token usage across prompts, context, tools, memory, and final
+responses, while ensuring that reducing tokens does not reduce task quality.
+
 Most agent benchmarks ask whether the task was completed. Suffice additionally
 asks how many tokens were required to complete it.
 
@@ -165,9 +171,20 @@ suffice run examples/baseline.yaml
 
 ## Limitations and roadmap
 
-Version 0.1 exposes deterministic controls; it does not yet rewrite prompts,
-semantically prune context, run external tools, or provide a universal exact
-tokenizer. Provider usage fields also differ.
+Suffice is intentionally not a complete, universal benchmark. Every real use
+case has different tasks, success criteria, tools, context sources, and token
+constraints. Answering the central question rigorously therefore requires a
+benchmark designed or adapted for that specific use case.
+
+The project is deliberately a solid, reproducible foundation for building
+those experiments rather than a collection of results tied to one provider,
+model, or synthetic benchmark. This keeps Suffice useful for other engineers
+and avoids presenting context-dependent measurements as universal findings.
+
+Version 0.1 exposes deterministic controls and an offline smoke benchmark for
+validating the harness. It does not yet rewrite prompts, semantically prune
+context, run external tools, or provide a universal exact tokenizer. Provider
+usage fields also differ.
 
 The principal future direction is an **Agent Token Optimizer**:
 
