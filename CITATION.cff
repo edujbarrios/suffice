@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use Suffice in your work, please cite this software."
+title: "Suffice: Token-efficiency evaluation for AI agents"
+type: software
+authors:
+  - family-names: Barrios
+    given-names: "Eduardo J."
+repository-code: "https://github.com/edujbarrios/suffice"
+url: "https://github.com/edujbarrios/suffice"
+license: MPL-2.0
+version: 0.1.0
+date-released: 2026-09-15
