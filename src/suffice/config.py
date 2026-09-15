@@ -37,6 +37,11 @@ class ExperimentConfig:
     model: ModelConfig = field(default_factory=ModelConfig)
     optimization: OptimizationConfig = field(default_factory=OptimizationConfig)
     token_budgets: tuple[int, ...] = ()
+    history_tail: int | None = None
+    retrieval_top_k: int | None = None
+    context_budget: int | None = None
+    tool_description_mode: str = "full"
+    tool_output_mode: str = "full"
 
     @classmethod
     def from_yaml(cls, path: str | Path) -> ExperimentConfig:
@@ -73,6 +78,11 @@ class ExperimentConfig:
             model=model,
             optimization=optimization,
             token_budgets=budgets,
+            history_tail=_optional_positive(raw.get("history_tail"), "history_tail"),
+            retrieval_top_k=_optional_positive(raw.get("retrieval_top_k"), "retrieval_top_k"),
+            context_budget=_optional_positive(raw.get("context_budget"), "context_budget"),
+            tool_description_mode=str(raw.get("tool_description_mode", "full")),
+            tool_output_mode=str(raw.get("tool_output_mode", "full")),
         )
 
 
@@ -80,4 +90,13 @@ def _mapping(value: Any, field_name: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ConfigError(f"'{field_name}' must be a mapping")
     return value
+
+
+def _optional_positive(value: Any, field_name: str) -> int | None:
+    if value is None:
+        return None
+    parsed = int(value)
+    if parsed < 0:
+        raise ConfigError(f"{field_name} must be non-negative")
+    return parsed
 
