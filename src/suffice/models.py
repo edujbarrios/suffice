@@ -39,5 +39,5 @@ class ExperimentResult:
         successful = [case for case in self.cases if case.success]
         if not successful:
             return None
-        return sum(case.metadata.get("total_tokens", 0) for case in successful) / len(successful)
+        return sum(case.token_trace.total or 0 for case in successful) / len(successful)
 
