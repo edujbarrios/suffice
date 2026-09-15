@@ -18,7 +18,7 @@ class ModelConfig:
     temperature: float = 0.0
     max_tokens: int = 1024
     base_url: str | None = None
-    api_key_env: str = "OPENAI_API_KEY"
+    api_key_env: str | None = "OPENAI_API_KEY"
     timeout_seconds: float = 30.0
     retries: int = 2
 
@@ -55,6 +55,8 @@ class ExperimentConfig:
         if not isinstance(raw, dict) or not raw.get("name") or not raw.get("tasks"):
             raise ConfigError("Configuration requires non-empty 'name' and 'tasks' fields")
         model_data = _mapping(raw.get("model", {}), "model")
+        if "api_key" in model_data:
+            raise ConfigError("Raw API keys are not allowed in YAML; use model.api_key_env instead")
         optimization_data = _mapping(raw.get("optimization", {}), "optimization")
         model = ModelConfig(**model_data)
         optimization = OptimizationConfig(**optimization_data)
